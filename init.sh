@@ -60,6 +60,7 @@ find ./ -type f -exec sed -i -e "s|_STEAM_HS_TOKEN_|${STEAM_HS_TOKEN}|g" {} \;
 chown -R 991:991 ./data
 chown -R 991:1337 ./data/bridges # why is this required :joy:
 chmod -R 0770 ./data
+chmod -R 0774 ./data/eturnal
 
 # Create registration files for mautrix bridges
 docker compose run mautrix-discord
