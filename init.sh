@@ -1,5 +1,6 @@
 #/bin/bash
-set -x
+
+# set -x
 
 export $(cat .env | xargs)
 
