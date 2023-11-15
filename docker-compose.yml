@@ -4,6 +4,7 @@ services:
     container_name: nginx
     image: nginx:stable-alpine
     restart: unless-stopped
+    user: 991:991
     logging:
       options:
         max-size: "10m"
@@ -33,6 +34,7 @@ services:
     # Alternatively, use element, > vectorim/element-web:latest
     container_name: web-client
     restart: unless-stopped
+    user: 991:991
     logging:
       options:
         max-size: "10m"
