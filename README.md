@@ -115,7 +115,7 @@ chmod +x init.sh && ./init.sh
 
 This will take several minutes to run and fully setup all services, don't panic.
 
-> [!INFO]
+> [!IMPORTANT]
 > Some bridges and bots require additional setup post-install, refer to the guides below after everything is functional
 
 
@@ -149,7 +149,7 @@ Synapse's config is found @ `/data/synapse/config.yaml`
 
 In order to safely enable public registration you will likely want to add either recaptcha or email verification (to prevent abuse).
 
-> [!WARN]
+> [!CAUTION]
 > The Mautrix bridges are not configured for a multi-user setup (though they will allow anyone registered on your HS to use them)
 > For this reason it's highly recommended to review your Mautrix bridge bots' configuration before enabling public registration
 
@@ -189,11 +189,3 @@ Input the respective values @ `data/bridges/telegram/config.yaml` (`telegram.api
 If using the bot relay, also add yourself to the `relaybot.whitelist` array in the config file.
 
 After configuring, uncomment the line on synapse's config `app_service_config_files` relevant to the telegram registration file.
-
-
-
-
-
-#### Guide TBD
-
-increase unix file handles
