@@ -1,0 +1,16 @@
+as_token: _STEAM_AS_TOKEN_
+hs_token: _STEAM_HS_TOKEN_
+id: steam-puppet
+namespaces:
+  users:
+    - exclusive: true
+      regex: '@_steampuppet_.*'
+  rooms: []
+  aliases:
+    - exclusive: true
+      regex: '#_steampuppet_.*'
+protocols: []
+rate_limited: false
+sender_localpart: _steampuppet_bot
+url: 'http://mx-puppet-steam:80'
+de.sorunome.msc2409.push_ephemeral: true

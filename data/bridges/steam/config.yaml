@@ -1,0 +1,31 @@
+bridge:
+  # Port to host the bridge on which your homeserver will connect to
+  port: 80
+  # Address for the bridge to bind to; if running as a Docker container, you
+  # probably want 0.0.0.0 here
+  bindAddress: 0.0.0.0
+  # Name of your homeserver
+  domain: example.org
+  # URL where the bridge can connect to your homeserver
+  homeserverUrl: http://synapse:80
+
+provisioning:
+  # Which users are allowed to issue commands to @_steampuppet_bot
+  whitelist:
+    - "@*:example.org"
+  # A blacklist can be used instead:
+  # blacklist:
+  #   - "@username:matrix\\.myhomeserver\\.com"
+
+  # Shared secret for the provisioning API for use by integration managers.
+  # If this is not set, the provisioning API will not be enabled.
+  #sharedSecret: random string
+  # Path prefix for the provisioning API. /v1 will be appended to the prefix automatically.
+  apiPrefix: /_matrix/provision
+
+presence:
+  # Bridge Steam online/offline status
+  enabled: false
+
+  # How often to send status to the homeserver in milliseconds
+  interval: 5000

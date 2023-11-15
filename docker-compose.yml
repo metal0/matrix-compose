@@ -1,0 +1,446 @@
+version: '3'
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:stable-alpine
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    volumes:
+      - ./data/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./cert.key:/etc/ssl/private/cert.key:ro
+      - ./cert.pem:/etc/ssl/certs/cert.pem:ro
+    ports:
+      - 443:443
+    networks:
+      - matrix
+      - client
+    depends_on:
+      web-client:
+        condition: service_started
+      cloudflared:
+        condition: service_started
+      synapse:
+        condition: service_healthy
+      hookshot:
+        condition: service_started
+
+  web-client:
+    image: tcpipuk/schildichat-web:latest #@sha256:313cbb80d1fa394d595ccdd79be78db4ab97ab341897eb48acb0e818c9fff024
+    # This is a community image, take note.
+    # Alternatively, use element, > vectorim/element-web:latest
+    container_name: web-client
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    volumes:
+#      - ./data/web-client/web-client.config.json:/app/config.json:Z  # ELEMENT
+      - ./data/web-client/web-client.config.json:/usr/share/nginx/html/config.json:Z  # SCHILDI
+    networks:
+      - client
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+      - CAP_NET_BIND_SERVICE
+    tmpfs:
+      - /var/run:size=50M,mode=0770,noexec,nosuid,nodev
+      - /var/cache/nginx:size=50M,mode=0770,noexec,nosuid,nodev
+
+  postgres:
+    container_name: postgres
+    image: postgres:15-alpine
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - matrix
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 2s
+    environment:
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=synapse
+    shm_size: 1g
+    runtime: runc
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "redis-cli","ping"]
+      interval: 3s
+      timeout: 3s
+    networks:
+      - matrix
+
+  synapse:
+    container_name: synapse
+    runtime: runc
+    image: matrixdotorg/synapse:latest
+    # Community image (https://mau.dev/maunium/synapse)
+    # Official image: matrixdotorg/synapse:latest
+    user: 991:991
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: unless-stopped
+    environment:
+      - SYNAPSE_REPORT_STATS=no
+      - SYNAPSE_CONFIG_PATH=/data/config.yaml
+      - TZ=Lisbon/Europe
+    healthcheck:
+      test: ["CMD", "curl", "-fSs", "http://localhost:8011/health"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+      start_period: 5s
+    networks:
+      - matrix
+    volumes:
+      - ./data/synapse:/data
+      - ./data/hookshot/registration.yml:/opt/appsvc/hookshot.registration.yml:ro
+      - ./data/bridges/discord/registration.yaml:/opt/appsvc/bridges/discord.registration.yaml:ro
+      - ./data/bridges/telegram/registration.yaml:/opt/appsvc/bridges/telegram.registration.yaml:ro
+      - ./data/bridges/signal/registration.yaml:/opt/appsvc/bridges/signal.registration.yaml:ro
+      - ./data/bridges/instagram/registration.yaml:/opt/appsvc/bridges/instagram.registration.yaml:ro
+      - ./data/bridges/twitter/registration.yaml:/opt/appsvc/bridges/twitter.registration.yaml:ro
+      - ./data/bridges/googlechat/registration.yaml:/opt/appsvc/bridges/googlechat.registration.yaml:ro
+      - ./data/bridges/gmessages/registration.yaml:/opt/appsvc/bridges/gmessages.registration.yaml:ro
+      - ./data/bridges/linkedin/registration.yaml:/opt/appsvc/bridges/linkedin.registration.yaml:ro
+      - ./data/bridges/slack/registration.yaml:/opt/appsvc/bridges/slack.registration.yaml:ro
+      - ./data/bridges/whatsapp/registration.yaml:/opt/appsvc/bridges/whatsapp.registration.yaml:ro
+      - ./data/bridges/facebook/registration.yaml:/opt/appsvc/bridges/facebook.registration.yaml:ro
+      - ./data/bridges/steam/registration.yaml:/opt/appsvc/bridges/steam.registration.yaml:ro
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  draupnir:
+    container_name: draupnir
+    image: gnuxie/draupnir:latest
+    restart: unless-stopped
+    user: 991:991
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    privileged: true
+    healthcheck:
+      test: ["CMD", "curl", "-fSs", "http://localhost:80/health"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+      start_period: 5s
+    networks:
+      - matrix
+    volumes:
+      - ./data/draupnir:/data
+    depends_on:
+      synapse:
+        condition: service_healthy
+      pantalaimon:
+        condition: service_started
+
+  hookshot:
+    container_name: hookshot
+    image: halfshot/matrix-hookshot:latest
+    restart: unless-stopped
+    user: 991:991
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - matrix
+    volumes:
+      - ./data/hookshot:/data
+    depends_on:
+      synapse:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  pantalaimon:
+    container_name: pantalaimon
+    build: ./pantalaimon
+    restart: unless-stopped
+    user: 991:991
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - matrix
+    volumes:
+      - ./data/pantalaimon:/data
+    depends_on:
+      synapse:
+        condition: service_healthy
+
+  eturnal:
+    container_name: eturnal
+    image: ghcr.io/processone/eturnal:latest
+    restart: unless-stopped
+    volumes:
+      - ./data/eturnal/eturnal.yml:/etc/eturnal.yml:ro
+    user: 9000:9000
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    read_only: true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    security_opt:
+      - no-new-privileges:true
+    network_mode: "host"
+    depends_on:
+      synapse:
+        condition: service_healthy
+
+  signald:
+    container_name: signald
+    image: docker.io/signald/signald
+    user: 991:991
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: unless-stopped
+    networks:
+      - matrix
+    volumes:
+    - ./data/signald:/signald
+
+  mautrix-discord:
+    container_name: mautrix-discord
+    image: dock.mau.dev/mautrix/discord:latest
+    privileged: true # /shrug
+    #user: 991:991
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: unless-stopped
+    volumes:
+    - ./data/bridges/discord:/data
+    networks:
+      - matrix
+
+  mautrix-facebook:
+    container_name: mautrix-facebook
+    image: dock.mau.dev/mautrix/facebook:latest
+    privileged: true # /shrug
+    #user: 991:991
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: unless-stopped
+    volumes:
+    - ./data/bridges/facebook:/data
+    networks:
+      - matrix
+
+  mautrix-gmessages:
+    container_name: mautrix-gmessages
+    image: dock.mau.dev/mautrix/gmessages:latest
+    privileged: true # /shrug
+    #user: 991:991
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: unless-stopped
+    volumes:
+    - ./data/bridges/gmessages:/data
+    networks:
+      - matrix
+
+  mautrix-googlechat:
+    container_name: mautrix-googlechat
+    image: dock.mau.dev/mautrix/googlechat:latest
+    privileged: true # /shrug
+    #user: 991:991
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: unless-stopped
+    volumes:
+    - ./data/bridges/googlechat:/data
+    networks:
+      - matrix
+
+  mautrix-instagram:
+    container_name: mautrix-instagram
+    image: dock.mau.dev/mautrix/instagram:latest
+    privileged: true # /shrug
+    #user: 991:991
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: unless-stopped
+    volumes:
+    - ./data/bridges/instagram:/data
+    networks:
+      - matrix
+
+  beeper-linkedin:
+    container_name: beeper-linkedin
+    image: ghcr.io/beeper/linkedin:latest
+    privileged: true # /shrug
+    #user: 991:991
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: unless-stopped
+    volumes:
+    - ./data/bridges/linkedin:/data
+    networks:
+      - matrix
+
+  mautrix-signal:
+    container_name: mautrix-signal
+    image: dock.mau.dev/mautrix/signal:latest
+    restart: unless-stopped
+    privileged: true # /shrug
+    #user: 991:991
+    volumes:
+    - ./data/bridges/signal:/data
+    - ./data/signald:/signald
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - matrix
+    depends_on:
+      signald:
+        condition: service_started
+
+  mautrix-slack:
+    container_name: mautrix-slack
+    image: dock.mau.dev/mautrix/slack:latest
+    privileged: true # /shrug
+    #user: 991:991
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: unless-stopped
+    volumes:
+    - ./data/bridges/slack:/data
+    networks:
+      - matrix
+
+  mx-puppet-steam:
+    container_name: mx-puppet-steam
+    image: ghcr.io/icewind1991/mx-puppet-steam:master
+    restart: unless-stopped
+    user: 991:991
+    volumes:
+    - ./data/bridges/steam:/data
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - matrix
+
+  mautrix-telegram:
+    container_name: mautrix-telegram
+    image: dock.mau.dev/mautrix/telegram:latest
+    privileged: true # /shrug
+    #user: 991:991
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: unless-stopped
+    volumes:
+    - ./data/bridges/telegram:/data
+    networks:
+      - matrix
+
+  mautrix-twitter:
+    container_name: mautrix-twitter
+    image: dock.mau.dev/mautrix/twitter:latest
+    privileged: true # /shrug
+    #user: 991:991
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: unless-stopped
+    volumes:
+    - ./data/bridges/twitter:/data
+    networks:
+      - matrix
+
+  mautrix-whatsapp:
+    container_name: mautrix-whatsapp
+    image: dock.mau.dev/mautrix/whatsapp:latest
+    privileged: true # /shrug
+    #user: 991:991
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: unless-stopped
+    volumes:
+    - ./data/bridges/whatsapp:/data
+    networks:
+      - matrix
+
+  cloudflared:
+    container_name: cloudflared
+    image: erisamoe/cloudflared
+    restart: always
+    command: tunnel run
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - matrix
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+
+networks:
+  client:
+    name: client
+    driver: bridge
+  matrix:
+    name: matrix
+    driver: bridge

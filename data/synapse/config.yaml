@@ -1,0 +1,334 @@
+####################################################
+#                                                  #
+#                    MAIN                          #
+#                                                  #
+#                                                  #
+####################################################
+
+# CHANGE_ME
+# Copy these values from config.yaml.example
+registration_shared_secret: _REGISTRATION_SECRET_
+macaroon_secret_key: _MACAROON_SECRET_
+form_secret: _FORM_SECRET_
+server_name: "example.org"
+
+
+web_client_location: "https://example.org" # Web client location
+public_baseurl: "https://example.org"
+admin_contact: 'mailto:admin@example.org'
+
+
+pid_file: /data/homeserver.pid
+signing_key_path: /data/signing.key
+serve_server_wellknown: true
+report_stats: false
+
+key_refresh_interval: 1d
+trusted_key_servers:
+  - server_name: "matrix.org"
+suppress_key_server_warning: true
+enable_metrics: true
+log_config: "/data/log.config"
+server_notices:
+   system_mxid_localpart: server
+   system_mxid_display_name: "Server Notices"
+   room_name: "Server Notices"
+
+
+
+app_service_config_files:
+- /opt/appsvc/hookshot.registration.yml
+- /data/appsvc/bridges/discord.registration.yaml
+# - /data/appsvc/bridges/telegram.registration.yaml
+- /data/appsvc/bridges/signal.registration.yaml
+- /data/appsvc/bridges/instagram.registration.yaml
+- /data/appsvc/bridges/twitter.registration.yaml
+- /data/appsvc/bridges/googlechat.registration.yaml
+- /data/appsvc/bridges/gmessages.registration.yaml
+- /data/appsvc/bridges/linkedin.registration.yaml
+- /data/appsvc/bridges/slack.registration.yaml
+- /data/appsvc/bridges/whatsapp.registration.yaml
+- /data/appsvc/bridges/facebook.registration.yaml
+- /data/appsvc/bridges/steam.registration.yaml
+
+listeners:
+  - port: 80
+    tls: false
+    type: http
+    x_forwarded: true
+    resources:
+      - names: [client]
+        compress: true
+      - names: [federation]
+        compress: true
+#      - names: [consent]
+#        compress: false
+  - port: 8009
+    type: metrics
+    resources:
+      - names: [metrics]
+        compress: false
+  - port: 8011
+    tls: false
+    type: http
+    resources:
+      - names: [health]
+        compress: false
+database:
+  name: psycopg2
+  args:
+    user: postgres
+    password: _PG_PASSWORD_
+    database: synapse
+    host: postgres
+    port: 5432
+    cp_min: 5
+    cp_max: 10
+
+
+turn_uris: [ "turn:turn.example.org?transport=udp", "turn:turn.example.org?transport=tcp" ]
+turn_shared_secret: "_ETURNAL_SECRET_"
+turn_user_lifetime: 86400000
+turn_allow_guests: false
+
+# CHANGE_ME: if you have a SMTP sender server
+email:
+  smtp_host: "smtp.example.org"
+  smtp_port: 587
+  smtp_user: "admin@example.org"
+  smtp_pass: "12345"
+  force_tls: false
+  require_transport_security: false
+  enable_tls: true
+  notif_from: "example.org <admin@example.org>"
+  app_name: example.org
+  enable_notifs: true
+  notif_for_new_users: false
+  validation_token_lifetime: 1h
+  invite_client_location: https://example.org # Web-client location
+
+
+
+####################################################
+#                                                  #
+#                    MEDIA                         #
+#                                                  #
+#                                                  #
+####################################################
+media_store_path: /data/media_store
+media_retention:
+    local_media_lifetime: 60d
+    remote_media_lifetime: 7d
+dynamic_thumbnails: true
+max_avatar_size: 15M
+max_upload_size: 40M
+max_image_pixels: 8M
+allowed_avatar_mimetypes: ["image/png", "image/jpeg", "image/gif"]
+url_preview_enabled: true
+max_spider_size: 15M
+url_preview_ip_range_blacklist:
+  - '127.0.0.0/8'
+  - '10.0.0.0/8'
+  - '172.16.0.0/12'
+  - '192.168.0.0/16'
+  - '100.64.0.0/10'
+  - '192.0.0.0/24'
+  - '169.254.0.0/16'
+  - '192.88.99.0/24'
+  - '198.18.0.0/15'
+  - '192.0.2.0/24'
+  - '198.51.100.0/24'
+  - '203.0.113.0/24'
+  - '224.0.0.0/4'
+  - '::1/128'
+  - 'fe80::/10'
+  - 'fc00::/7'
+  - '2001:db8::/32'
+  - 'ff00::/8'
+  - 'fec0::/10'
+
+url_preview_url_blacklist:
+  # blacklist any URL with a username in its URI
+  - username: '*'
+
+  # blacklist all *.google.com URLs
+  - netloc: 'google.com'
+  - netloc: '*.google.com'
+
+  # blacklist all plain HTTP URLs
+  - scheme: 'http'
+
+  # blacklist http(s)://www.acme.com/foo
+  - netloc: 'www.acme.com'
+    path: '/foo'
+
+  # blacklist any URL with a literal IPv4 address
+  - netloc: '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'
+
+url_preview_accept_language:
+   - 'en-UK'
+   - 'en-US;q=0.9'
+   - 'fr;q=0.8'
+   - '*;q=0.7'
+
+#registration_shared_secret: "w4KM1-xy8.-YhVF3.uYDxiA8+Yv*x-2bsH*r&.EXVSkV=E_l@b"
+
+
+
+
+
+
+
+
+####################################################
+#                                                  #
+#                 USER SETTINGS                    #
+#                                                  #
+#                                                  #
+####################################################
+# Sessions
+session_lifetime: 14d
+refresh_token_lifetime: 12h
+nonrefreshable_access_token_lifetime: 7d
+ui_auth:
+    session_timeout: "1m"
+delete_stale_devices_after: 30d
+login_via_existing_session:
+    enabled: true
+    require_ui_auth: true
+    token_timeout: "5m"
+user_ips_max_age: 30d
+default_identity_server: https://vector.im
+
+# Push Notifs
+push:
+  enabled: true
+  include_content: true
+  group_unread_count_by_room: true
+  jitter_delay: "2s"
+
+# Registration requirements
+
+# CHANGE_ME: Captchas
+# https://matrix-org.github.io/synapse/latest/CAPTCHA_SETUP.html
+#recaptcha_public_key:
+#recaptcha_private_key:
+#enable_registration_captcha: true
+
+enable_registration: false # CHANGE_ME: If you want to enable public registration for your server
+registration_requires_token: false # CHANGE_ME: If you want registration to require a admin-provisioned token
+disable_msisdn_registration: true # Allows users to set an 3pid later after registering
+allow_guest_access: false
+#registrations_require_3pid: # CHANGE_ME
+#  - email
+password_config:
+   enabled: true
+   localdb_enabled: true
+   pepper: "_PASSWORD_SALT_"
+   policy:
+      enabled: true
+      minimum_length: 10
+      require_digit: true
+      require_symbol: true
+      require_lowercase: true
+      require_uppercase: true
+
+# Perms
+enable_set_displayname: true
+require_auth_for_profile_requests: true
+allow_public_rooms_without_auth: false
+allow_public_rooms_over_federation: false
+require_membership_for_aliases: true
+limit_profile_requests_to_users_who_share_rooms: false
+allow_per_room_profiles: true
+enable_search: true
+user_directory:
+    enabled: true
+    search_all_users: true
+    prefer_local_users: true
+enable_room_list_search: true
+
+# Limit complexity
+limit_remote_rooms:
+  enabled: true
+  complexity: 40.0
+  complexity_error: "This room is a bit too complex for this homeserver to handle, sorry."
+  admins_can_join: false
+
+# Auto Join Rooms
+autocreate_auto_join_room_preset: public_chat
+autocreate_auto_join_rooms: true
+auto_join_rooms:
+  - "#general:example.org"
+autocreate_auto_join_rooms_federated: false
+auto_join_mxid_localpart: system
+auto_join_rooms_for_guests: false
+
+# Retention policies
+retention:
+  enabled: true
+  default_policy:
+    min_lifetime: 1d
+    max_lifetime: 1y
+  allowed_lifetime_min: 1d
+  allowed_lifetime_max: 1y
+  purge_jobs:
+    - longest_max_lifetime: 3d
+      interval: 12h
+    - shortest_max_lifetime: 3d
+      interval: 1d
+
+# Consent
+#user_consent:
+#  block_events_error: >-
+#    You can't send any messages until you consent to the privacy policy at
+#    %(consent_uri)s.
+#  server_notice_content:
+#    msgtype: m.text
+#    body: >-
+#      Please give your consent to the privacy policy at %(consent_uri)s.
+#  require_at_registration: true
+#  template_dir: /data/privacy_policy_templates
+#  version: 1.0
+
+
+####################################################
+#                                                  #
+#                    NETWORKING                    #
+#                                                  #
+#                                                  #
+####################################################
+
+presence:
+  enabled: false # CHANGE_ME: Higher resource usage if enabled, recommended to keep disabled
+filter_timeline_limit: 5000
+event_cache_size: 10K
+caches:
+  global_factor: 2.0
+#  per_cache_factors:
+#    get_users_who_share_room_with_user: 1.5
+  sync_response_cache_duration: 4m
+#  cache_autotuning:
+#    max_cache_memory_usage: 512M
+#    target_cache_memory_usage: 210M
+#    min_cache_ttl: 5m
+
+# Federation
+federation:
+  client_timeout: 60s
+  max_short_retry_delay: 6s
+  max_long_retry_delay: 40s
+  max_short_retries: 10
+  max_long_retries: 20
+federation_metrics_domains:
+  - matrix.org
+rc_federation:
+  window_size: 700
+  sleep_limit: 15
+  sleep_delay: 400
+  reject_limit: 30
+  concurrent: 6
+federation_rr_transactions_per_room_per_second: 35
+allow_public_rooms_over_federation: true
+allow_profile_lookup_over_federation: true
+allow_device_name_lookup_over_federation: false
