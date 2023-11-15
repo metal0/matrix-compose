@@ -74,6 +74,7 @@ docker compose run mautrix-telegram
 docker compose run mautrix-twitter
 docker compose run mautrix-whatsapp
 
+chmod -R 0774 ./data/bridges/**/registration.yaml # Temporary monkey-patch so Synapse can read the files :clown:
 
 # Start everything up
 docker compose up -d
