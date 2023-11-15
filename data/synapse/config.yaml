@@ -38,18 +38,18 @@ server_notices:
 
 app_service_config_files:
 - /opt/appsvc/hookshot.registration.yml
-- /data/appsvc/bridges/discord.registration.yaml
-# - /data/appsvc/bridges/telegram.registration.yaml
-- /data/appsvc/bridges/signal.registration.yaml
-- /data/appsvc/bridges/instagram.registration.yaml
-- /data/appsvc/bridges/twitter.registration.yaml
-- /data/appsvc/bridges/googlechat.registration.yaml
-- /data/appsvc/bridges/gmessages.registration.yaml
-- /data/appsvc/bridges/linkedin.registration.yaml
-- /data/appsvc/bridges/slack.registration.yaml
-- /data/appsvc/bridges/whatsapp.registration.yaml
-- /data/appsvc/bridges/facebook.registration.yaml
-- /data/appsvc/bridges/steam.registration.yaml
+- /opt/appsvc/bridges/discord.registration.yaml
+# - /opt/appsvc/bridges/telegram.registration.yaml
+- /opt/appsvc/bridges/signal.registration.yaml
+- /opt/appsvc/bridges/instagram.registration.yaml
+- /opt/appsvc/bridges/twitter.registration.yaml
+- /opt/appsvc/bridges/googlechat.registration.yaml
+- /opt/appsvc/bridges/gmessages.registration.yaml
+- /opt/appsvc/bridges/linkedin.registration.yaml
+- /opt/appsvc/bridges/slack.registration.yaml
+- /opt/appsvc/bridges/whatsapp.registration.yaml
+- /opt/appsvc/bridges/facebook.registration.yaml
+- /opt/appsvc/bridges/steam.registration.yaml
 
 listeners:
   - port: 80
