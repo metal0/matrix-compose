@@ -4,7 +4,7 @@ services:
     container_name: nginx
     image: nginx:stable-alpine
     restart: unless-stopped
-    user: 991:991
+    #user: 991:991
     logging:
       options:
         max-size: "10m"
@@ -34,7 +34,7 @@ services:
     # Alternatively, use element, > vectorim/element-web:latest
     container_name: web-client
     restart: unless-stopped
-    user: 991:991
+    #user: 991:991
     logging:
       options:
         max-size: "10m"
@@ -138,6 +138,7 @@ services:
       - ./data/bridges/whatsapp/registration.yaml:/opt/appsvc/bridges/whatsapp.registration.yaml:ro
       - ./data/bridges/facebook/registration.yaml:/opt/appsvc/bridges/facebook.registration.yaml:ro
       - ./data/bridges/steam/registration.yaml:/opt/appsvc/bridges/steam.registration.yaml:ro
+      - ./data/bridges/heisenbridge/registration.yaml:/opt/appsvc/bridges/heisenbridge.registration.yaml:ro
 
     depends_on:
       postgres:
@@ -169,6 +170,24 @@ services:
       synapse:
         condition: service_healthy
       pantalaimon:
+        condition: service_started
+
+  heisenbridge:
+    container_name: heisenbridge
+    image: hif1/heisenbridge:latest
+    command: -c /data/registration.yaml -p 80 http://synapse:80
+    restart: unless-stopped
+    user: 991:1337
+    networks:
+      - matrix
+    volumes:
+      - ./data/bridges/heisenbridge:/data
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    depends_on:
+      nginx: # Depends on nginx for detecting the HS public URL. fun interaction.
         condition: service_started
 
   hookshot:

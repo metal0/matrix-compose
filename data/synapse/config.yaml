@@ -50,6 +50,7 @@ app_service_config_files:
 - /opt/appsvc/bridges/whatsapp.registration.yaml
 - /opt/appsvc/bridges/facebook.registration.yaml
 - /opt/appsvc/bridges/steam.registration.yaml
+- /opt/appsvc/bridges/heisenbridge.registration.yaml
 
 listeners:
   - port: 80

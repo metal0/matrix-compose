@@ -73,8 +73,12 @@ docker compose run mautrix-slack
 docker compose run mautrix-telegram
 docker compose run mautrix-twitter
 docker compose run mautrix-whatsapp
+docker run --rm --name heisenbridge-generate -v ./data/bridges/heisenbridge:/data hif1/heisenbridge:latest -c /data/registration.yaml -p 80 http://synapse:80 --generate
+sed -i 's/0.0.0.0:80/heisenbridge:80/g' ./data/bridges/heisenbridge/registration.yaml # xd
 
 chmod -R 0774 ./data/bridges/**/registration.yaml # Temporary monkey-patch so Synapse can read the files :clown:
+chmod -R 0774 ./data/web-client # ...
+
 
 # Start everything up
 docker compose up -d
