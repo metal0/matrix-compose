@@ -110,7 +110,7 @@ Finally, you need to run the initialization script `init.sh` which will setup ev
 
 
 ```bash
-chmod +x init.sh && ./init.sh
+sh init.sh
 ```
 
 This will take several minutes to run and fully setup all services, don't panic.
@@ -188,3 +188,26 @@ Input the respective values @ `data/bridges/telegram/config.yaml` (`telegram.api
 If using the bot relay, also add yourself to the `relaybot.whitelist` array in the config file.
 
 After configuring, uncomment the line on synapse's config `app_service_config_files` relevant to the telegram registration file.
+
+#### Bot Localparts
+
+* Discord: `@mautrix-discordbot:example.org`
+* Draupnir: `@draupnir:example.org`
+* Facebook: `@mautrix-facebookbot:example.org`
+* Gmessages: `@mautrix-gmessagesbot:example.org`
+* Googlechat: `@mautrix-googlechatbot:example.org`
+* Heisenbridge: `@heisenbridge:example.org`
+* Hookshot: `@hookshot:example.org`
+* Instagram: `@mautrix-instagrambot:example.org`
+* LinkedIn: `@beeper-linkedinbot:example.org`
+* Signal: `@mautrix-signalbot:example.org`
+* Slack: `@mautrix-slackbot:example.org`
+* Steam: `@_steampuppet_bot:example.org`
+* Telegram: `@mautrix-telegrambot:example.org`
+* Twitter: `@mautrix-twitterbot:example.org`
+* WhatsApp: `@mautrix-whatsappbot:example.org`
+
+
+# Contributing
+
+All contributions are welcome!
