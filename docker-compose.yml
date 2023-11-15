@@ -70,6 +70,8 @@ services:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 5s
       timeout: 2s
+      retries: 10
+      start_period: 5s
     environment:
       - POSTGRES_PASSWORD=${PG_PASSWORD}
       - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
