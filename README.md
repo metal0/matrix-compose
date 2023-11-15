@@ -5,14 +5,13 @@
 matrix-compose is a collection of scripts and config files intended to make setting up and configuring a small/personal [Matrix](https://matrix.org/) homeserver easier.
 
 
-Included in the docker-compose services are, along with a working homeserver (Synapse) setup, various social media bridges (Discord, Facebook, Google Messages, Google Chat, Instagram, LinkedIn, Signal, Slack, Steam, Telegram, Twitter, WhatsApp), as well as utilitarian bots such as [Hookshot](https://github.com/matrix-org/matrix-hookshot) and [Draupnir](https://github.com/the-draupnir-project/Draupnir)
+Included in the docker-compose services are, along with a working homeserver (Synapse) setup, various social media bridges (IRC, Discord, Facebook, Google Messages, Google Chat, Instagram, LinkedIn, Signal, Slack, Steam, Telegram, Twitter, WhatsApp), as well as utilitarian bots such as [Hookshot](https://github.com/matrix-org/matrix-hookshot), [Draupnir](https://github.com/the-draupnir-project/Draupnir)
 
 ## Motivation and goals of this project
 
-As someone with very basic docker-compose experience who wanted to get into the matrix "ecosystem", I found it difficult to find such easy setups such as this available.
+As someone with very basic docker-compose experience who wanted to get into the matrix "ecosystem", I found it difficult to find easy setups such as this available.
 
 For this reason (and because constructing my own docker-compose with ~35 services for my own HS took weeks), I wanted to provide a slightly easier way to selfhost your own Matrix HS without needing a sysadmin bachelor's degree.
-
 
 The goals of matrix-compose are not to be a full-fledged and perfect production HS, but more-so a personal, small HS that people can experiment with, and learn about the matrix ecosystem with.
 
@@ -25,12 +24,11 @@ The goals of matrix-compose are not to be a full-fledged and perfect production 
 ## Pre-requisites
 
 * A Linux Server with at least 10Gb free disk space and ~2Gb RAM
-> Resource usage will mostly depend on your usage
+(Resource usage will mostly depend on your usage)
 
 * A available domain behind a reverse proxy such as Cloudflare
 
-* Linux, Docker, Docker-Compose and Git experience or willingless to google issues that arise
-
+* Linux, Docker, Docker-Compose and Git experience or willingness to google issues that arise
 
 
 ## Getting everything ready
@@ -52,9 +50,12 @@ Before you proceed, it's best to decide how your DNS/Reverse Proxying will conne
 
 matrix-compose was designed to be put behind a reverse proxy and will NOT be secure at all if not behind one.
 
-[Cloudflare Tunnels](https://www.cloudflare.com/products/tunnel/) are recommended and supported for high flexibility and security environments.
+> [!NOTE]
+> If you do not wish to run it behind a reverse proxy, make sure to rework X-Forwarded-For headers and such in `data/nginx/nginx.conf`.
 
-#### Cloudflare Tunnels
+[Cloudflare Tunnels](https://www.cloudflare.com/products/tunnel/) are recommended and supported for high flexibility and secure environments.
+
+#### Cloudflare Tunnels Setup
 
 If using Cloudflare Tunnels, simply create a new tunnel, copy the token shown on the "Install Connector" page and save it for later.
 
@@ -116,8 +117,9 @@ sh init.sh
 This will take several minutes to run and fully setup all services, don't panic.
 
 > [!IMPORTANT]
-> Some bridges and bots require additional setup post-install, refer to the guides below after everything is functional
+> Some bridges/bots require additional setup post-install, refer to the guides below after everything is functional
 
+It's highly recommended to use [matrix's federation testing tool](https://federationtester.matrix.org/) after finishing the setup to verify that everything is working.
 
 
 ## Firewalling
@@ -144,32 +146,60 @@ In order to customize the web-client to your liking, please refer to [Element We
 
 Synapse's config is found @ `/data/synapse/config.yaml`
 
+The included config shouldn't need any major changes.
+
 ### Enabling Public Registration
 
 In order to safely enable public registration you will likely want to add either recaptcha or email verification (to prevent abuse).
 
 > [!CAUTION]
-> The Mautrix bridges are not configured for a multi-user setup (though they will allow anyone registered on your HS to use them)
-> For this reason it's highly recommended to review your Mautrix bridge bots' configuration before enabling public registration
+> The Mautrix bridges are configured for a single-user use-case (though they will allow anyone registered on your HS to use them)
+> For this reason it's highly recommended to review your Mautrix bridge bots' configuration before enabling public registration, as the mautrix bridges can easily leak private data due to how they are currently setup (with multi-users).
 
 
 ## Bot Setup
 
+### Bot Localparts
+
+* Discord: `@mautrix-discordbot:example.org`
+* Draupnir: `@draupnir:example.org`
+* Facebook: `@mautrix-facebookbot:example.org`
+* Gmessages: `@mautrix-gmessagesbot:example.org`
+* Googlechat: `@mautrix-googlechatbot:example.org`
+* Heisenbridge: `@heisenbridge:example.org`
+* Hookshot: `@hookshot:example.org`
+* Instagram: `@mautrix-instagrambot:example.org`
+* LinkedIn: `@beeper-linkedinbot:example.org`
+* Signal: `@mautrix-signalbot:example.org`
+* Slack: `@mautrix-slackbot:example.org`
+* Steam: `@_steampuppet_bot:example.org`
+* Telegram: `@mautrix-telegrambot:example.org`
+* Twitter: `@mautrix-twitterbot:example.org`
+* WhatsApp: `@mautrix-whatsappbot:example.org`
+
+
 ### Draupnir
 
+Draupnir is a Moderation bot for Matrix, useful if you want to run & secure a public room against spam.
 
 Create a management room for Draupnir, make sure it's set to invite-only. (As anyone who joins the room can use the bot)
+
 Give it the local alias `#draupnir`
+
 Invite the bot to the room (`@draupnir:example.org`)
+
 Restart the draupnir docker container `docker restart draupnir`
+
 You should see it join the room!
+
 [Quick-start guide](https://github.com/the-draupnir-project/Draupnir#quickstart-guide)
 
 
 ### Hookshot
 
+Hookshot is a bridge between multiple project management services (Github, Gitlab, Jira, etc) as well as a webhooks provider and rss feeds tracker.
+By default Hookshot is only configured to handle generic webhooks and RSS/Atom feeds, anything else needs to be configured manually.
 
-Only Generic Webhooks and RSS/Atom feeds are configured and enabled by default
 Bot: `@hookshot:example.org`
 
 Check [hookshot documentation](https://matrix-org.github.io/matrix-hookshot/latest/hookshot.html) for usage/configuration guides.
@@ -188,24 +218,6 @@ Input the respective values @ `data/bridges/telegram/config.yaml` (`telegram.api
 If using the bot relay, also add yourself to the `relaybot.whitelist` array in the config file.
 
 After configuring, uncomment the line on synapse's config `app_service_config_files` relevant to the telegram registration file.
-
-#### Bot Localparts
-
-* Discord: `@mautrix-discordbot:example.org`
-* Draupnir: `@draupnir:example.org`
-* Facebook: `@mautrix-facebookbot:example.org`
-* Gmessages: `@mautrix-gmessagesbot:example.org`
-* Googlechat: `@mautrix-googlechatbot:example.org`
-* Heisenbridge: `@heisenbridge:example.org`
-* Hookshot: `@hookshot:example.org`
-* Instagram: `@mautrix-instagrambot:example.org`
-* LinkedIn: `@beeper-linkedinbot:example.org`
-* Signal: `@mautrix-signalbot:example.org`
-* Slack: `@mautrix-slackbot:example.org`
-* Steam: `@_steampuppet_bot:example.org`
-* Telegram: `@mautrix-telegrambot:example.org`
-* Twitter: `@mautrix-twitterbot:example.org`
-* WhatsApp: `@mautrix-whatsappbot:example.org`
 
 
 # Contributing
