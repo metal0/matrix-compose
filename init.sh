@@ -62,21 +62,18 @@ chown -R 991:1337 ./data/bridges # why is this required :joy:
 chmod -R 0770 ./data
 
 # Create registration files for mautrix bridges
-docker compose up mautrix-discord -d
-docker compose up mautrix-facebook -d
-docker compose up mautrix-gmessages -d
-docker compose up mautrix-googlechat -d
-docker compose up mautrix-instagram -d
-docker compose up beeper-linkedin -d
-docker compose up mautrix-signal -d
-docker compose up mautrix-slack -d
-docker compose up mautrix-telegram -d
-docker compose up mautrix-twitter -d
-docker compose up mautrix-whatsapp # hacky
+docker compose run mautrix-discord
+docker compose run mautrix-facebook
+docker compose run mautrix-gmessages
+docker compose run mautrix-googlechat
+docker compose run mautrix-instagram
+docker compose run beeper-linkedin
+docker compose run mautrix-signal
+docker compose run mautrix-slack
+docker compose run mautrix-telegram
+docker compose run mautrix-twitter
+docker compose run mautrix-whatsapp
 
-sleep 5
-
-docker compose down
 
 # Start everything up
 docker compose up -d
