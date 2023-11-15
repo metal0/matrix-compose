@@ -122,7 +122,6 @@ This will take several minutes to run and fully setup all services, don't panic.
 
 ## Firewalling
 
-> Ports:
 ### Nginx
 
 Nginx needs only port `443` allowed (if not using cloudflare tunnels)
