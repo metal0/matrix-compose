@@ -19,7 +19,6 @@ SALT=$(openssl rand -hex 512)
 PG_PASSWORD=$(openssl rand -hex 32)
 ETURNAL_SECRET=$(openssl rand -hex 512)
 IPV4=$(dig @1.1.1.1 ch txt whoami.Cloudflare +short)
-DRAUPNIR_PW=$(openssl rand -hex 64)
 REGISTRATION_SECRET=$(awk '/registration_shared_secret:/{gsub(/"/,""); print $2}' ./data/synapse/config.yaml.example)
 MACAROON_SECRET=$(awk '/macaroon_secret_key:/{gsub(/"/,""); print $2}' ./data/synapse/config.yaml.example)
 FORM_SECRET=$(awk '/form_secret:/{gsub(/"/,""); print $2}' ./data/synapse/config.yaml.example)
@@ -32,7 +31,6 @@ find ./ -type f -exec sed -i -e "s|_PASSWORD_SALT_|${SALT}|g" {} \;
 find ./ -type f -exec sed -i -e "s|_ETURNAL_SECRET_|${ETURNAL_SECRET}|g" {} \;
 find ./ -type f -exec sed -i -e "s|_PG_PASSWORD_|${PG_PASSWORD}|g" {} \;
 find ./ -type f -exec sed -i -e "s|\"_IPV4_\"|${IPV4}|g" {} \;
-find ./ -type f -exec sed -i -e "s|_DRAUPNIR_PASSWORD_|${DRAUPNIR_PW}|g" {} \;
 find ./ -type f -exec sed -i -e "s|_REGISTRATION_SECRET_|\"${ESCAPED_REGISTRATION_SECRET}\"|g" {} \;
 find ./ -type f -exec sed -i -e "s|_MACAROON_SECRET_|\"${ESCAPED_MACAROON_SECRET}\"|g" {} \;
 find ./ -type f -exec sed -i -e "s|_FORM_SECRET_|\"${ESCAPED_FORM_SECRET}\"|g" {} \;
@@ -87,8 +85,6 @@ docker compose up -d
 
 
 # After init stuff
-docker exec -it synapse register_new_matrix_user http://localhost:80 -c /data/config.yaml -u draupnir -p ${DRAUPNIR_PW} -t bot --no-admin
-
 ADMIN_PW=$(openssl rand -hex 16)
 docker exec -it synapse register_new_matrix_user http://localhost:80 -c /data/config.yaml -u admin -p ${ADMIN_PW} -t support -a
 

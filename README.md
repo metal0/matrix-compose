@@ -5,7 +5,7 @@
 matrix-compose is a collection of scripts and config files intended to make setting up and configuring a small/personal [Matrix](https://matrix.org/) homeserver easier.
 
 
-Included in the docker-compose services are, along with a working homeserver (Synapse) setup, various social media bridges (IRC, Discord, Facebook, Google Messages, Google Chat, Instagram, LinkedIn, Signal, Slack, Steam, Telegram, Twitter, WhatsApp), as well as utilitarian bots such as [Hookshot](https://github.com/matrix-org/matrix-hookshot), [Draupnir](https://github.com/the-draupnir-project/Draupnir)
+Included in the docker-compose services are, along with a working homeserver (Synapse) setup, various social media bridges (IRC, Discord, Facebook, Google Messages, Google Chat, Instagram, LinkedIn, Signal, Slack, Steam, Telegram, Twitter, WhatsApp), as well as utilitarian bots such as [Hookshot](https://github.com/matrix-org/matrix-hookshot)
 
 ## Motivation and goals of this project
 
@@ -162,7 +162,6 @@ In order to safely enable public registration you will likely want to add either
 ### Bot Localparts
 
 * Discord: `@mautrix-discordbot:example.org`
-* Draupnir: `@draupnir:example.org`
 * Facebook: `@mautrix-facebookbot:example.org`
 * Gmessages: `@mautrix-gmessagesbot:example.org`
 * Googlechat: `@mautrix-googlechatbot:example.org`
@@ -176,23 +175,6 @@ In order to safely enable public registration you will likely want to add either
 * Telegram: `@mautrix-telegrambot:example.org`
 * Twitter: `@mautrix-twitterbot:example.org`
 * WhatsApp: `@mautrix-whatsappbot:example.org`
-
-
-### Draupnir
-
-Draupnir is a Moderation bot for Matrix, useful if you want to run & secure a public room against spam.
-
-Create a management room for Draupnir, make sure it's set to invite-only. (As anyone who joins the room can use the bot)
-
-Give it the local alias `#draupnir`
-
-Invite the bot to the room (`@draupnir:example.org`)
-
-Restart the draupnir docker container `docker restart draupnir`
-
-You should see it join the room!
-
-[Quick-start guide](https://github.com/the-draupnir-project/Draupnir#quickstart-guide)
 
 
 ### Hookshot
