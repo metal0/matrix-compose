@@ -96,7 +96,7 @@ docker compose up -d --remove-orphans
 ADMIN_PW=$(openssl rand -hex 16)
 docker exec -it synapse register_new_matrix_user http://localhost:80 -c /data/config.yaml -u admin -p ${ADMIN_PW} -t support -a
 
-echo "Done! Feel free to login with username \"admin\" and password \"${ADMIN_PW}\" and login at https://matrix.${TS_TAILNET}"
+echo "Done! Feel free to login with username \"admin\" and password \"${ADMIN_PW}\" at https://matrix.${TS_TAILNET}"
 echo "Please copy your admin password now as it won't be visible again, and change it on first login."
 
 # Prevent re-running this, lol
