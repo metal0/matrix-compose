@@ -59,7 +59,7 @@ bridge:
     no_bridge_info_state_key: false
 
     # Should leaving Matrix rooms be bridged as leaving groups on the remote network?
-    bridge_matrix_leave: false
+    bridge_matrix_leave: true
     # Should room tags only be synced when creating the portal? Tags mean things like favorite/pin and archive/low priority.
     # Tags currently can't be synced back to the remote network, so a continuous sync means tagging from Matrix will be undone.
     tag_only_on_create: true
@@ -389,7 +389,7 @@ encryption:
     allow_key_sharing: true
     # Pickle key for encrypting encryption keys in the bridge database.
     # If set to generate, a random key will be generated.
-    pickle_key: mautrix.bridge.e2ee
+    pickle_key: generate
     # Options for deleting megolm sessions from the bridge.
     delete_keys:
         # Beeper-specific: delete outbound sessions when hungryserv confirms

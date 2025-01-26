@@ -365,7 +365,7 @@ bridge:
     relay:
         # Whether relay mode should be allowed. If allowed, `!ig set-relay` can be used to turn any
         # authenticated user into a relaybot for that chat.
-        enabled: false
+        enabled: true
         # The formats to use when sending messages to Instagram via a relay user.
         #
         # Available variables:

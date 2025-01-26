@@ -443,7 +443,7 @@ bridge:
     relay:
         # Whether relay mode should be allowed. If allowed, `!wa set-relay` can be used to turn any
         # authenticated user into a relaybot for that chat.
-        enabled: false
+        enabled: true
         # Should only admins be allowed to set themselves as relay users?
         admin_only: true
         # The formats to use when sending messages to WhatsApp via the relaybot.
