@@ -78,7 +78,7 @@ chmod -R 0774 ./data/web-client # ...
 
 
 # Start everything up
-docker compose up -d
+docker compose up -d --remove-orphans
 
 
 
