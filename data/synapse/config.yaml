@@ -87,7 +87,7 @@ database:
     cp_min: 5
     cp_max: 10
 
-federation_domain_whitelist: []
+federation_domain_whitelist: ["example.org"]
 #turn_uris: [ "turn:turn.example.org?transport=udp", "turn:turn.example.org?transport=tcp" ]
 #turn_shared_secret: "_ETURNAL_SECRET_"
 turn_user_lifetime: 86400000
