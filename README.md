@@ -5,7 +5,12 @@
 matrix-compose is a collection of scripts and config files intended to make setting up and configuring a small/personal [Matrix](https://matrix.org/) homeserver easier.
 
 
-Included in the docker-compose services are, along with a working homeserver (Synapse) setup, various social media bridges (IRC, Discord, Facebook (Meta), Google Messages, Google Chat, Instagram, LinkedIn, Signal, Slack, Steam, Telegram, Twitter, WhatsApp), as well as utilitarian bots such as [Hookshot](https://github.com/matrix-org/matrix-hookshot)
+Included in the docker-compose services are, along with a working **unfederated** homeserver (Synapse) setup, various social media bridges (IRC, Bluesky, Discord, Facebook (Meta), Google Messages, Google Chat, Instagram, LinkedIn, Signal, Slack, Steam, Telegram, Twitter, WhatsApp), as well as utilitarian bots such as [Hookshot](https://github.com/matrix-org/matrix-hookshot)
+
+> [!CAUTION]
+> This branch (`unfed`)'s setup refers to a completely isolated & unfederated matrix server setup, which is only intended to be used for experimentation and for utilizing social platform bridge bots.
+> This setup will NOT allow communication with other matrix homeservers, nor any "typical" usage of the matrix platform.
+
 
 ## Motivation and goals of this project
 
@@ -26,10 +31,9 @@ The goals of matrix-compose are not to be a full-fledged and perfect production 
 * A Linux Server with at least 10Gb free disk space and ~2Gb RAM
 (Resource usage will mostly depend on your usage)
 
-* A available domain behind a reverse proxy such as Cloudflare
-
 * Linux, Docker, Docker-Compose and Git experience or willingness to google issues that arise
 
+* Tailscale account
 
 ## Getting everything ready
 
@@ -44,35 +48,11 @@ sudo apt-get update
 sudo apt-get install -y openssl dig curl git
 ```
 
-### Setup DNS and Routing
+### VPN Routing
 
-Before you proceed, it's best to decide how your DNS/Reverse Proxying will connect to your matrix HS.
+matrix-compose (unfederated) was designed to be put behind the tailscale VPN, which provides us with free TLS certs and keeps our server isolated from the internet (as with any other VPN)
 
-matrix-compose was designed to be put behind a reverse proxy and will NOT be secure at all if not behind one.
-
-> [!NOTE]
-> If you do not wish to run it behind a reverse proxy, make sure to rework X-Forwarded-For headers and such in `data/nginx/nginx.conf`.
-
-[Cloudflare Tunnels](https://www.cloudflare.com/products/tunnel/) are recommended and supported for high flexibility and secure environments.
-
-#### Cloudflare Tunnels Setup
-
-If using Cloudflare Tunnels, simply create a new tunnel, copy the token shown on the "Install Connector" page and save it for later.
-
-Add a single public hostname of `HTTPS://` `nginx:443` for the URL you are configuring your matrix HS to be available at.
-
-__**Make sure to enable "No TLS Verify" on the tunnel settings**__ (or replace the self-signed generated certs at the end of the setup with Cloudflare Certs), otherwise the tunnel will refuse to connect to your Nginx backend.
-
-#### DNS Records
-
-Set the following DNS records on your domain's DNS management dashboard:
-
-* **A** `example.org.` - ipv4 (if not using tunnels)
-
-* **A** `turn.example.org.` - your server's IPv4 address (for VoIP)
-
-* **AAAA** `turn.example.org.` - your server's IPv6 address (for VoIP)
-
+Register an account over at [Tailscale](https://login.tailscale.com/start), grab your [Tailnet Name](https://login.tailscale.com/admin/dns), [create auth keys](https://login.tailscale.com/admin/settings/keys), and [setup your own devices](https://tailscale.com/download) that will be used as clients for connecting to this matrix server.
 
 
 
@@ -81,14 +61,14 @@ Set the following DNS records on your domain's DNS management dashboard:
 ### Clone the repo
 
 ```sh
-git clone https://github.com/metal0/matrix-compose.git
+git clone -b unfed https://github.com/metal0/matrix-compose.git
 ```
 
 ### Install Docker Engine (and Docker Compose)
 
 
 Refer to the following guide on how to install these for your OS/Distro:
-[https://docs.docker.com/engine/install/#server]
+https://docs.docker.com/engine/install/#server
 
 __Make sure to test your docker installation as mentioned in the guides before proceeding!__
 
@@ -100,7 +80,7 @@ cp .env.example .env
 ```
 
 
-Then edit it with your favorite text editor, making sure to ONLY filling in `DOMAIN_NAME` (and `TUNNEL_TOKEN` if using Cloudflare Tunnels).
+Then edit it with your favorite text editor, making sure to ONLY filling in `TS_AUTHKEY` and `TS_TAILNET`).
 ```bash
 nano .env
 ```
@@ -119,7 +99,6 @@ This will take several minutes to run and fully setup all services, don't panic.
 > [!IMPORTANT]
 > Some bridges/bots require additional setup post-install, refer to the guides below after everything is functional
 
-It's highly recommended to use [matrix's federation testing tool](https://federationtester.matrix.org/) after finishing the setup to verify that everything is working.
 
 
 ## Firewalling
@@ -151,10 +130,6 @@ The included config shouldn't need any major changes.
 ### Enabling Public Registration
 
 In order to safely enable public registration you will likely want to add either recaptcha or email verification (to prevent abuse).
-
-> [!CAUTION]
-> The Mautrix bridges are configured for a single-user use-case (though they will allow anyone registered on your HS to use them)
-> For this reason it's highly recommended to review your Mautrix bridge bots' configuration before enabling public registration, as the mautrix bridges can easily leak private data due to how they are currently setup (with multi-users).
 
 
 ## Bot Setup
