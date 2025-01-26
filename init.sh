@@ -13,7 +13,7 @@ docker compose pull
 
 docker compose build
 
-docker run --rm --name synapse-generate -v ./data/synapse:/data -e SYNAPSE_REPORT_STATS=no -e SYNAPSE_CONFIG_PATH=/data/config.yaml.example -e SYNAPSE_SERVER_NAME=google.com matrixdotorg/synapse:latest generate
+docker run --rm --name synapse-generate -v ./data/synapse:/data -e SYNAPSE_REPORT_STATS=no -e SYNAPSE_CONFIG_PATH=/data/config.yaml.example -e SYNAPSE_SERVER_NAME=google.com ghcr.io/element-hq/synapse:v1.123.0rc1 generate
 
 SALT=$(openssl rand -hex 512)
 PG_PASSWORD=$(openssl rand -hex 32)
