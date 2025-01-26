@@ -4,7 +4,7 @@
 
 export $(cat .env | xargs)
 
-sudo apt-get update && apt-get install -y openssl dig git
+sudo apt-get update && apt-get install -y openssl git
 
 docker compose pull
 
@@ -14,7 +14,6 @@ docker run --rm --name synapse-generate -v ./data/synapse:/data -e SYNAPSE_REPOR
 
 SALT=$(openssl rand -hex 512)
 PG_PASSWORD=$(openssl rand -hex 32)
-IPV4=$(dig @1.1.1.1 ch txt whoami.Cloudflare +short)
 REGISTRATION_SECRET=$(awk '/registration_shared_secret:/{gsub(/"/,""); print $2}' ./data/synapse/config.yaml.example)
 MACAROON_SECRET=$(awk '/macaroon_secret_key:/{gsub(/"/,""); print $2}' ./data/synapse/config.yaml.example)
 FORM_SECRET=$(awk '/form_secret:/{gsub(/"/,""); print $2}' ./data/synapse/config.yaml.example)
@@ -25,7 +24,6 @@ ESCAPED_MACAROON_SECRET=$(printf '%s\n' "$MACAROON_SECRET" | sed -e 's/[]\/$*.^[
 find ./ -type f -exec sed -i -e "s|example.org|matrix.${TS_TAILNET}|g" {} \;
 find ./ -type f -exec sed -i -e "s|_PASSWORD_SALT_|${SALT}|g" {} \;
 find ./ -type f -exec sed -i -e "s|_PG_PASSWORD_|${PG_PASSWORD}|g" {} \;
-find ./ -type f -exec sed -i -e "s|\"_IPV4_\"|${IPV4}|g" {} \;
 find ./ -type f -exec sed -i -e "s|_REGISTRATION_SECRET_|\"${ESCAPED_REGISTRATION_SECRET}\"|g" {} \;
 find ./ -type f -exec sed -i -e "s|_MACAROON_SECRET_|\"${ESCAPED_MACAROON_SECRET}\"|g" {} \;
 find ./ -type f -exec sed -i -e "s|_FORM_SECRET_|\"${ESCAPED_FORM_SECRET}\"|g" {} \;

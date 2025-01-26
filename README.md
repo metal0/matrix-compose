@@ -42,10 +42,10 @@ The goals of matrix-compose are not to be a full-fledged and perfect production 
 
 You need to install all the relevant tooling for the setup process, though the bulk of the services run on Docker, your host requires some setup.
 
-install git, openssl, dig, curl
+install git, openssl, curl
 ```sh
 sudo apt-get update
-sudo apt-get install -y openssl dig curl git
+sudo apt-get install -y openssl curl git
 ```
 
 ### VPN Routing
