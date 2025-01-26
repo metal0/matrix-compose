@@ -175,29 +175,6 @@ services:
       redis:
         condition: service_healthy
 
-  eturnal:
-    container_name: eturnal
-    image: ghcr.io/processone/eturnal:latest
-    restart: unless-stopped
-    volumes:
-      - ./data/eturnal/eturnal.yml:/etc/eturnal.yml:ro
-    user: 9000:9000
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "3"
-    read_only: true
-    cap_drop:
-      - ALL
-    cap_add:
-      - NET_BIND_SERVICE
-    security_opt:
-      - no-new-privileges:true
-    network_mode: "host"
-    depends_on:
-      synapse:
-        condition: service_healthy
-
   signald:
     container_name: signald
     image: docker.io/signald/signald

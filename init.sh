@@ -14,7 +14,6 @@ docker run --rm --name synapse-generate -v ./data/synapse:/data -e SYNAPSE_REPOR
 
 SALT=$(openssl rand -hex 512)
 PG_PASSWORD=$(openssl rand -hex 32)
-ETURNAL_SECRET=$(openssl rand -hex 512)
 IPV4=$(dig @1.1.1.1 ch txt whoami.Cloudflare +short)
 REGISTRATION_SECRET=$(awk '/registration_shared_secret:/{gsub(/"/,""); print $2}' ./data/synapse/config.yaml.example)
 MACAROON_SECRET=$(awk '/macaroon_secret_key:/{gsub(/"/,""); print $2}' ./data/synapse/config.yaml.example)
@@ -25,7 +24,6 @@ ESCAPED_MACAROON_SECRET=$(printf '%s\n' "$MACAROON_SECRET" | sed -e 's/[]\/$*.^[
 
 find ./ -type f -exec sed -i -e "s|example.org|matrix.${TS_TAILNET}|g" {} \;
 find ./ -type f -exec sed -i -e "s|_PASSWORD_SALT_|${SALT}|g" {} \;
-find ./ -type f -exec sed -i -e "s|_ETURNAL_SECRET_|${ETURNAL_SECRET}|g" {} \;
 find ./ -type f -exec sed -i -e "s|_PG_PASSWORD_|${PG_PASSWORD}|g" {} \;
 find ./ -type f -exec sed -i -e "s|\"_IPV4_\"|${IPV4}|g" {} \;
 find ./ -type f -exec sed -i -e "s|_REGISTRATION_SECRET_|\"${ESCAPED_REGISTRATION_SECRET}\"|g" {} \;
@@ -55,7 +53,6 @@ find ./ -type f -exec sed -i -e "s|_STEAM_HS_TOKEN_|${STEAM_HS_TOKEN}|g" {} \;
 chown -R 991:991 ./data
 chown -R 991:1337 ./data/bridges # why is this required :joy:
 chmod -R 0770 ./data
-chmod -R 0774 ./data/eturnal
 
 # Create registration files for mautrix bridges
 docker compose run mautrix-discord

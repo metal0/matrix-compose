@@ -107,15 +107,6 @@ This will take several minutes to run and fully setup all services, don't panic.
 
 Nginx needs only port `443` allowed (if not using cloudflare tunnels)
 
-### Eturnal (VoIP)
-
-If you wish to use VoIP with Eturnal, you will need to allow the following ports:
-> `3478`
-> `5349`
-> `49152-65535`
-In addition, you should add your server's IPv6 address to `/data/eturnal/eturnal.yml`, and verify that VoIP is working using a tool such as [https://test.voip.librepush.net/]
-
-
 ## Customizing the Web Client
 
 In order to customize the web-client to your liking, please refer to [Element Web's Documentation](https://github.com/vector-im/element-web/blob/develop/docs/config.md).
