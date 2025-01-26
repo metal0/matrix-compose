@@ -21,7 +21,7 @@ services:
     depends_on:
       web-client:
         condition: service_started
-      cloudflared:
+      tailscale:
         condition: service_started
       synapse:
         condition: service_healthy
@@ -102,9 +102,8 @@ services:
   synapse:
     container_name: synapse
     runtime: runc
-    image: matrixdotorg/synapse:latest
+    image: ghcr.io/element-hq/synapse:sha256-2f4dbd0b748e9178ea761f5586d0a1ade88f283a0481ba5dd2c42bc19d45b2a4.sig
     # Community image (https://mau.dev/maunium/synapse)
-    # Official image: matrixdotorg/synapse:latest
     user: 991:991
     logging:
       options:
@@ -430,8 +429,9 @@ services:
 #      - 'TS_EXTRA_ARGS=--advertise-tags=tag:app'
       - TS_STATE_DIR=/var/lib/tailscale
       - TS_USERSPACE=false
-      - 'TS_HOSTNAME=${TS_HOSTNAME}'
+      - 'TS_HOSTNAME=matrix'
       - TS_AUTH_ONCE=true
+      - TS_SERVE_CONFIG=/var/lib/tailscale/serve.json
     volumes:
       - './data/tailscale:/var/lib/tailscale'
     devices:
