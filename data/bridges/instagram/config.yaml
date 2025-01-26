@@ -133,8 +133,7 @@ bridge:
     # Allow using double puppeting from any server with a valid client .well-known file.
     double_puppet_allow_discovery: true
     # Servers to allow double puppeting from, even if double_puppet_allow_discovery is false.
-    double_puppet_server_map:
-        example.org: https://example.org
+    double_puppet_server_map: {}
     # Shared secret for https://github.com/devture/matrix-synapse-shared-secret-auth
     #
     # If set, custom puppets will be enabled automatically for local users
@@ -153,7 +152,7 @@ bridge:
         enable_initial: true
         # Enable backfill queue? This is used for backfilling additional threads after the initial sync,
         # and when MSC2716 is enabled, to backfill message history going backwards.
-        enable: false
+        enable: true
         # Use MSC2716 for backfilling? If this is disabled, backfilling only happens when syncing threads,
         # and the incremental settings below don't apply.
         #
@@ -164,7 +163,7 @@ bridge:
         # In order to use this, the double puppets must be in the appservice's user ID namespace
         # (because the bridge can't use the double puppet access token with batch sending).
         # This only affects double puppets on the local server, double puppets on other servers will never be used.
-        double_puppet_backfill: false
+        double_puppet_backfill: true
         # The maximum number of conversations that should be synced.
         # Other conversations will be backfilled on demand when the start PM
         # provisioning endpoint is used or when a message comes in from that

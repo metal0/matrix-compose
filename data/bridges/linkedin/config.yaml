@@ -141,8 +141,7 @@ bridge:
     # and is therefore prone to race conditions.
     sync_direct_chat_list: true
     # Servers to always allow double puppeting from
-    double_puppet_server_map:
-        example.org: https://example.org
+    double_puppet_server_map: {}
     double_puppet_allow_discovery: true
     # Shared secrets for https://github.com/devture/matrix-synapse-shared-secret-auth
     #

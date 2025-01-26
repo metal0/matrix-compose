@@ -128,8 +128,7 @@ bridge:
     # Allow using double puppeting from any server with a valid client .well-known file.
     double_puppet_allow_discovery: true
     # Servers to allow double puppeting from, even if double_puppet_allow_discovery is false.
-    double_puppet_server_map:
-        example.org: https://example.org
+    double_puppet_server_map: {}
     # Shared secret for https://github.com/devture/matrix-synapse-shared-secret-auth
     #
     # If set, custom puppets will be enabled automatically for local users

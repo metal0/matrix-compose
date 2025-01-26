@@ -128,8 +128,7 @@ bridge:
         # Number of messages to backfill on startup if the last message ID in the chat sync doesn't match the last bridged message.
         missed_limit: 100
     # Servers to always allow double puppeting from
-    double_puppet_server_map:
-        example.org: https://example.org
+    double_puppet_server_map: {}
     # Allow using double puppeting from any server with a valid client .well-known file.
     double_puppet_allow_discovery: true
     # Shared secrets for https://github.com/devture/matrix-synapse-shared-secret-auth
