@@ -149,7 +149,7 @@ bridge:
     delete_guild_on_leave: true
     # Whether or not created rooms should have federation enabled.
     # If false, created portal rooms will never be federated.
-    federate_rooms: true
+    federate_rooms: false
     # Prefix messages from webhooks with the profile info? This can be used along with a custom displayname_template
     # to better handle webhooks that change their name all the time (like ones used by bridges).
     prefix_webhook_messages: true

@@ -158,7 +158,7 @@ bridge:
     update_avatar_initial_sync: true
     # Whether or not created rooms should have federation enabled.
     # If false, created portal rooms will never be federated.
-    federate_rooms: true
+    federate_rooms: false
     # Whether to explicitly set the avatar and room name for private chat portal rooms.
     # If set to `default`, this will be enabled in encrypted rooms and disabled in unencrypted rooms.
     # If set to `always`, all DM rooms will have explicit names and avatars set.

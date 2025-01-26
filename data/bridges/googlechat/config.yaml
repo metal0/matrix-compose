@@ -203,7 +203,7 @@ bridge:
     message_status_events: false
     # Whether or not created rooms should have federation enabled.
     # If false, created portal rooms will never be federated.
-    federate_rooms: true
+    federate_rooms: false
     # Settings for backfilling messages from Google Chat.
     backfill:
         # Whether or not the Google Chat users of logged in Matrix users should be

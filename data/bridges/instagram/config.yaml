@@ -146,7 +146,7 @@ bridge:
     #    example.org: foo
     # Whether or not created rooms should have federation enabled.
     # If false, created portal rooms will never be federated.
-    federate_rooms: true
+    federate_rooms: false
     # Settings for backfilling messages from Instagram.
     backfill:
         # Enable initial backfill (~10 messages after creating portal)?

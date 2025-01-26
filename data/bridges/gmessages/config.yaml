@@ -160,7 +160,7 @@ bridge:
     tag_only_on_create: true
     # Whether or not created rooms should have federation enabled.
     # If false, created portal rooms will never be federated.
-    federate_rooms: true
+    federate_rooms: false
     # Should the bridge never send alerts to the bridge management room?
     # These are mostly things like the user being logged out.
     disable_bridge_alerts: false

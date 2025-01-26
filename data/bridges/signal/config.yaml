@@ -152,7 +152,7 @@ bridge:
         example.org: https://example.org
     #login_shared_secret_map:
     #    example.org: foo
-    federate_rooms: true
+    federate_rooms: false
     # End-to-bridge encryption support options.
     #
     # See https://docs.mau.fi/bridges/general/end-to-bridge-encryption.html for more info.

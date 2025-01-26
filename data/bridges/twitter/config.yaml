@@ -141,7 +141,7 @@ bridge:
     #    example.org: foo
     # Whether or not created rooms should have federation enabled.
     # If false, created portal rooms will never be federated.
-    federate_rooms: true
+    federate_rooms: false
     # Settings for backfilling messages from Twitter.
     #
     # Missed message backfilling is currently based on receiving them from the Twitter polling API,
