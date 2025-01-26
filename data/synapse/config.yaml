@@ -38,6 +38,7 @@ server_notices:
 
 app_service_config_files:
 - /opt/appsvc/hookshot.registration.yml
+- /opt/appsvc/bridges/bluesky.registration.yaml
 - /opt/appsvc/bridges/discord.registration.yaml
 # - /opt/appsvc/bridges/telegram.registration.yaml
 - /opt/appsvc/bridges/signal.registration.yaml

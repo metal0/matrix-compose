@@ -53,6 +53,7 @@ chown -R 991:1337 ./data/bridges # why is this required :joy:
 chmod -R 0770 ./data
 
 # Create registration files for mautrix bridges
+docker compose run mautrix-bluesky
 docker compose run mautrix-discord
 docker compose run mautrix-meta
 docker compose run mautrix-gmessages
