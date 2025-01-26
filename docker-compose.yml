@@ -201,7 +201,8 @@ services:
   signald:
     container_name: signald
     image: docker.io/signald/signald
-    user: 991:991
+    privileged: true # /shrug
+    #user: 991:991
     logging:
       options:
         max-size: "10m"
