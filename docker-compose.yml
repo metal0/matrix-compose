@@ -190,6 +190,21 @@ services:
     volumes:
     - ./data/signald:/signald
 
+  mautrix-bluesky:
+    container_name: mautrix-bluesky
+    image: dock.mau.dev/mautrix/bluesky:latest
+    privileged: true # /shrug
+    #user: 991:991
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: unless-stopped
+    volumes:
+    - ./data/bridges/bluesky:/data
+    networks:
+      - matrix
+
   mautrix-discord:
     container_name: mautrix-discord
     image: dock.mau.dev/mautrix/discord:latest
