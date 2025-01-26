@@ -118,6 +118,7 @@ services:
     volumes:
       - ./data/synapse:/data
       - ./data/hookshot/registration.yml:/opt/appsvc/hookshot.registration.yml:ro
+      - ./data/bridges/bluesky/registration.yaml:/opt/appsvc/bridges/bluesky.registration.yaml:ro
       - ./data/bridges/discord/registration.yaml:/opt/appsvc/bridges/discord.registration.yaml:ro
       - ./data/bridges/telegram/registration.yaml:/opt/appsvc/bridges/telegram.registration.yaml:ro
       - ./data/bridges/signal/registration.yaml:/opt/appsvc/bridges/signal.registration.yaml:ro
