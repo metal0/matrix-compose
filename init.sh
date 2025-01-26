@@ -54,29 +54,29 @@ chmod -R 0770 ./data
 
 # Create registration files for mautrix bridges
 echo "Setup Bluesky"
-docker compose run --remove-orphans mautrix-bluesky
+docker compose run --rm mautrix-bluesky
 echo "Setup Discord"
-docker compose run --remove-orphans mautrix-discord
+docker compose run --rm mautrix-discord
 echo "Setup Meta"
-docker compose run --remove-orphans mautrix-meta
+docker compose run --rm mautrix-meta
 echo "Setup Google Messages"
-docker compose run --remove-orphans mautrix-gmessages
+docker compose run --rm mautrix-gmessages
 echo "Setup Google Chat"
-docker compose run --remove-orphans mautrix-googlechat
+docker compose run --rm mautrix-googlechat
 echo "Setup Instagram"
-docker compose run --remove-orphans mautrix-instagram
+docker compose run --rm mautrix-instagram
 echo "Setup LinkedIn"
-docker compose run --remove-orphans beeper-linkedin
+docker compose run --rm beeper-linkedin
 echo "Setup Signal"
-docker compose run --remove-orphans mautrix-signal
+docker compose run --rm mautrix-signal
 echo "Setup Slack"
-docker compose run --remove-orphans mautrix-slack
+docker compose run --rm mautrix-slack
 echo "Setup Telegram"
-docker compose run --remove-orphans mautrix-telegram
+docker compose run --rm mautrix-telegram
 echo "Setup Twitter"
-docker compose run --remove-orphans mautrix-twitter
+docker compose run --rm mautrix-twitter
 echo "Setup WhatsApp"
-docker compose run --remove-orphans mautrix-whatsapp
+docker compose run --rm mautrix-whatsapp
 echo "Setup Heisenbridge"
 docker run --rm --name heisenbridge-generate -v ./data/bridges/heisenbridge:/data hif1/heisenbridge:latest -c /data/registration.yaml -p 80 http://synapse:80 --generate
 sed -i 's/0.0.0.0:80/heisenbridge:80/g' ./data/bridges/heisenbridge/registration.yaml # xd
