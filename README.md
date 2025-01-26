@@ -5,7 +5,7 @@
 matrix-compose is a collection of scripts and config files intended to make setting up and configuring a small/personal [Matrix](https://matrix.org/) homeserver easier.
 
 
-Included in the docker-compose services are, along with a working homeserver (Synapse) setup, various social media bridges (IRC, Discord, Facebook, Google Messages, Google Chat, Instagram, LinkedIn, Signal, Slack, Steam, Telegram, Twitter, WhatsApp), as well as utilitarian bots such as [Hookshot](https://github.com/matrix-org/matrix-hookshot)
+Included in the docker-compose services are, along with a working homeserver (Synapse) setup, various social media bridges (IRC, Discord, Facebook (Meta), Google Messages, Google Chat, Instagram, LinkedIn, Signal, Slack, Steam, Telegram, Twitter, WhatsApp), as well as utilitarian bots such as [Hookshot](https://github.com/matrix-org/matrix-hookshot)
 
 ## Motivation and goals of this project
 
@@ -162,7 +162,7 @@ In order to safely enable public registration you will likely want to add either
 ### Bot Localparts
 
 * Discord: `@mautrix-discordbot:example.org`
-* Facebook: `@mautrix-facebookbot:example.org`
+* Meta: `@mautrix-metabot:example.org`
 * Gmessages: `@mautrix-gmessagesbot:example.org`
 * Googlechat: `@mautrix-googlechatbot:example.org`
 * Heisenbridge: `@heisenbridge:example.org`

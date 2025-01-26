@@ -7,7 +7,7 @@
 /data/bridges/**/*-mautrix.db*
 /data/bridges/steam/database.db
 /data/bridges/discord/registration.yaml
-/data/bridges/facebook/registration.yaml
+/data/bridges/meta/registration.yaml
 /data/bridges/gmessages/registration.yaml
 /data/bridges/googlechat/registration.yaml
 /data/bridges/instagram/registration.yaml

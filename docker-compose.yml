@@ -128,7 +128,7 @@ services:
       - ./data/bridges/linkedin/registration.yaml:/opt/appsvc/bridges/linkedin.registration.yaml:ro
       - ./data/bridges/slack/registration.yaml:/opt/appsvc/bridges/slack.registration.yaml:ro
       - ./data/bridges/whatsapp/registration.yaml:/opt/appsvc/bridges/whatsapp.registration.yaml:ro
-      - ./data/bridges/facebook/registration.yaml:/opt/appsvc/bridges/facebook.registration.yaml:ro
+      - ./data/bridges/meta/registration.yaml:/opt/appsvc/bridges/meta.registration.yaml:ro
       - ./data/bridges/steam/registration.yaml:/opt/appsvc/bridges/steam.registration.yaml:ro
       - ./data/bridges/heisenbridge/registration.yaml:/opt/appsvc/bridges/heisenbridge.registration.yaml:ro
 
@@ -227,9 +227,9 @@ services:
     networks:
       - matrix
 
-  mautrix-facebook:
-    container_name: mautrix-facebook
-    image: dock.mau.dev/mautrix/facebook:latest
+  mautrix-meta:
+    container_name: mautrix-meta
+    image: dock.mau.dev/mautrix/meta:latest
     privileged: true # /shrug
     #user: 991:991
     logging:
@@ -238,7 +238,7 @@ services:
         max-file: "3"
     restart: unless-stopped
     volumes:
-    - ./data/bridges/facebook:/data
+    - ./data/bridges/meta:/data
     networks:
       - matrix
 

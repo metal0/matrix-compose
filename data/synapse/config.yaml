@@ -48,7 +48,7 @@ app_service_config_files:
 - /opt/appsvc/bridges/linkedin.registration.yaml
 - /opt/appsvc/bridges/slack.registration.yaml
 - /opt/appsvc/bridges/whatsapp.registration.yaml
-- /opt/appsvc/bridges/facebook.registration.yaml
+- /opt/appsvc/bridges/meta.registration.yaml
 - /opt/appsvc/bridges/steam.registration.yaml
 - /opt/appsvc/bridges/heisenbridge.registration.yaml
 
