@@ -11,17 +11,11 @@ services:
         max-file: "3"
     volumes:
       - ./data/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./cert.key:/etc/ssl/private/cert.key:ro
-      - ./cert.pem:/etc/ssl/certs/cert.pem:ro
-    ports:
-      - 443:443
     networks:
       - matrix
       - client
     depends_on:
       web-client:
-        condition: service_started
-      tailscale:
         condition: service_started
       synapse:
         condition: service_healthy
@@ -405,9 +399,9 @@ services:
   tailscale:
     container_name: tailscale
     image: 'tailscale/tailscale:latest'
-    hostname: tailscale
-    networks:
-      - matrix
+#    hostname: tailscale
+#    networks:
+#      - matrix
     environment:
       - 'TS_AUTHKEY=${TS_AUTHKEY}'
 #      - 'TS_EXTRA_ARGS=--advertise-tags=tag:app'
@@ -423,6 +417,7 @@ services:
     cap_add:
       - net_admin
     restart: always
+    network_mode: service:nginx
 
 
 networks:

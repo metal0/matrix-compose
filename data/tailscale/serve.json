@@ -5,10 +5,10 @@
     }
   },
   "Web": {
-    "matrix.example.org:443": {
+    "example.org:443": {
       "Handlers": {
         "/": {
-          "Proxy": "http://127.0.0.1:80"
+          "Proxy": "http://localhost:80"
         }
       }
     }

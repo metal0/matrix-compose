@@ -5,7 +5,6 @@
 export $(cat .env | xargs)
 
 sudo apt-get update && apt-get install -y openssl dig git
-openssl req -x509 -newkey rsa:4096 -keyout ./cert.key -out ./cert.pem -days 3650 -subj "/CN=${TS_TAILNET}" -nodes
 
 docker compose pull
 
