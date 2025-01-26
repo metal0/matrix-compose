@@ -182,23 +182,6 @@ services:
       redis:
         condition: service_healthy
 
-  pantalaimon:
-    container_name: pantalaimon
-    build: ./pantalaimon
-    restart: unless-stopped
-    user: 991:991
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "3"
-    networks:
-      - matrix
-    volumes:
-      - ./data/pantalaimon:/data
-    depends_on:
-      synapse:
-        condition: service_healthy
-
   eturnal:
     container_name: eturnal
     image: ghcr.io/processone/eturnal:latest

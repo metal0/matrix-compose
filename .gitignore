@@ -1,5 +1,4 @@
 /.env
-/data/pantalaimon/pan.db
 /data/postgres
 /data/synapse/media_store
 /data/synapse/signing.key
