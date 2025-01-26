@@ -146,32 +146,6 @@ services:
       redis:
         condition: service_healthy
 
-  draupnir:
-    container_name: draupnir
-    image: gnuxie/draupnir:latest
-    restart: unless-stopped
-    user: 991:991
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "3"
-    privileged: true
-    healthcheck:
-      test: ["CMD", "curl", "-fSs", "http://localhost:80/health"]
-      interval: 2s
-      timeout: 3s
-      retries: 15
-      start_period: 5s
-    networks:
-      - matrix
-    volumes:
-      - ./data/draupnir:/data
-    depends_on:
-      synapse:
-        condition: service_healthy
-      pantalaimon:
-        condition: service_started
-
   heisenbridge:
     container_name: heisenbridge
     image: hif1/heisenbridge:latest
@@ -446,19 +420,26 @@ services:
     networks:
       - matrix
 
-  cloudflared:
-    container_name: cloudflared
-    image: erisamoe/cloudflared
-    restart: always
-    command: tunnel run
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "3"
+  tailscale:
+    image: 'tailscale/tailscale:latest'
+    hostname: tailscale
     networks:
       - matrix
     environment:
-      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+      - 'TS_AUTHKEY=${TS_AUTH_KEY}'
+#      - 'TS_EXTRA_ARGS=--advertise-tags=tag:app'
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_USERSPACE=false
+      - 'TS_HOSTNAME=${TS_HOSTNAME}'
+      - TS_AUTH_ONCE=true
+    volumes:
+      - './data/tailscale:/var/lib/tailscale'
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - net_admin
+    restart: always
+
 
 networks:
   client:
