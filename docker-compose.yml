@@ -400,7 +400,7 @@ services:
 #      - 'TS_EXTRA_ARGS=--advertise-tags=tag:app'
       - TS_STATE_DIR=/var/lib/tailscale
       - TS_USERSPACE=false
-      - 'TS_HOSTNAME=matrix'
+      - 'TS_HOSTNAME=${TS_HOSTNAME}'
       - TS_AUTH_ONCE=true
       - TS_SERVE_CONFIG=/var/lib/tailscale/serve.json
     volumes:

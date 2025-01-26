@@ -21,7 +21,7 @@ ESCAPED_REGISTRATION_SECRET=$(printf '%s\n' "$REGISTRATION_SECRET" | sed -e 's/[
 ESCAPED_FORM_SECRET=$(printf '%s\n' "$FORM_SECRET" | sed -e 's/[]\/$*.^[]/\\&/g');
 ESCAPED_MACAROON_SECRET=$(printf '%s\n' "$MACAROON_SECRET" | sed -e 's/[]\/$*.^[]/\\&/g');
 
-find ./ -type f -exec sed -i -e "s|example.org|matrix.${TS_TAILNET}|g" {} \;
+find ./ -type f -exec sed -i -e "s|example.org|${TS_HOSTNAME}.${TS_TAILNET}|g" {} \;
 find ./ -type f -exec sed -i -e "s|_PASSWORD_SALT_|${SALT}|g" {} \;
 find ./ -type f -exec sed -i -e "s|_PG_PASSWORD_|${PG_PASSWORD}|g" {} \;
 find ./ -type f -exec sed -i -e "s|_REGISTRATION_SECRET_|\"${ESCAPED_REGISTRATION_SECRET}\"|g" {} \;
@@ -96,7 +96,7 @@ docker compose up -d --remove-orphans
 ADMIN_PW=$(openssl rand -hex 16)
 docker exec -it synapse register_new_matrix_user http://localhost:80 -c /data/config.yaml -u admin -p ${ADMIN_PW} -t support -a
 
-echo "Done! Feel free to login with username \"admin\" and password \"${ADMIN_PW}\" at https://matrix.${TS_TAILNET}"
+echo "Done! Feel free to login with username \"admin\" and password \"${ADMIN_PW}\" at https://${TS_HOSTNAME}.${TS_TAILNET}"
 echo "Please copy your admin password now as it won't be visible again, and change it on first login."
 
 # Prevent re-running this, lol
