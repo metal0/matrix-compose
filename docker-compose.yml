@@ -403,6 +403,7 @@ services:
       - matrix
 
   tailscale:
+    container_name: tailscale
     image: 'tailscale/tailscale:latest'
     hostname: tailscale
     networks:
