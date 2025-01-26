@@ -60,7 +60,7 @@ chmod -R 0774 ./data/eturnal
 
 # Create registration files for mautrix bridges
 docker compose run mautrix-discord
-docker compose run mautrix-facebook
+docker compose run mautrix-facebook ## update
 docker compose run mautrix-gmessages
 docker compose run mautrix-googlechat
 docker compose run mautrix-instagram
