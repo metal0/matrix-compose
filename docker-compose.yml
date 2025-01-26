@@ -102,7 +102,7 @@ services:
   synapse:
     container_name: synapse
     runtime: runc
-    image: ghcr.io/element-hq/synapse:sha256-2f4dbd0b748e9178ea761f5586d0a1ade88f283a0481ba5dd2c42bc19d45b2a4.sig
+    image: ghcr.io/element-hq/synapse:v1.123.0rc1
     # Community image (https://mau.dev/maunium/synapse)
     user: 991:991
     logging:
