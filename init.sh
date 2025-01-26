@@ -53,31 +53,31 @@ chown -R 991:1337 ./data/bridges # why is this required :joy:
 chmod -R 0770 ./data
 
 # Create registration files for mautrix bridges
-echo "Setup Bluesky"
+echo "> Setup Bluesky"
 docker compose run --rm mautrix-bluesky
-echo "Setup Discord"
+echo "> Setup Discord"
 docker compose run --rm mautrix-discord
-echo "Setup Meta"
+echo "> Setup Meta"
 docker compose run --rm mautrix-meta
-echo "Setup Google Messages"
+echo "> Setup Google Messages"
 docker compose run --rm mautrix-gmessages
-echo "Setup Google Chat"
+echo "> Setup Google Chat"
 docker compose run --rm mautrix-googlechat
-echo "Setup Instagram"
+echo "> Setup Instagram"
 docker compose run --rm mautrix-instagram
-echo "Setup LinkedIn"
+echo "> Setup LinkedIn"
 docker compose run --rm beeper-linkedin
-echo "Setup Signal"
+echo "> Setup Signal"
 docker compose run --rm mautrix-signal
-echo "Setup Slack"
+echo "> Setup Slack"
 docker compose run --rm mautrix-slack
-echo "Setup Telegram"
+echo "> Setup Telegram"
 docker compose run --rm mautrix-telegram
-echo "Setup Twitter"
+echo "> Setup Twitter"
 docker compose run --rm mautrix-twitter
-echo "Setup WhatsApp"
+echo "> Setup WhatsApp"
 docker compose run --rm mautrix-whatsapp
-echo "Setup Heisenbridge"
+echo "> Setup Heisenbridge"
 docker run --rm --name heisenbridge-generate -v ./data/bridges/heisenbridge:/data hif1/heisenbridge:latest -c /data/registration.yaml -p 80 http://synapse:80 --generate
 sed -i 's/0.0.0.0:80/heisenbridge:80/g' ./data/bridges/heisenbridge/registration.yaml # xd
 
